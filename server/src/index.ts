@@ -1,13 +1,11 @@
 import "colors.ts";
 
 import cors from "cors";
-import dotenv from "dotenv";
 import express, { Request, Response } from "express";
-import path from "path";
 
-dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
+import { PORT as PORT_FROM_ENV } from "./environment";
 
-const PORT = process.env.PORT || 8080;
+const PORT = PORT_FROM_ENV || 8080;
 
 const app = express();
 
