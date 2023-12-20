@@ -1,8 +1,6 @@
 import "colors.ts";
-
 import cors from "cors";
 import express, { Request, Response } from "express";
-
 import { connectDB } from "./config";
 import { PORT as PORT_FROM_ENV } from "./environment";
 
