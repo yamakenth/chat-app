@@ -54,7 +54,22 @@ export const updateUser = asyncHandler(async (_req: Request, res: Response) => {
   res.send("updateUser to be implemented");
 });
 
-export const deleteUser = asyncHandler(async (_req: Request, res: Response) => {
-  // TODO
-  res.send("deleteUser to be implemented");
+export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  if (!userId) {
+    res.status(400);
+    throw new Error("userId is required");
+  }
+
+  const deletedUser = await User.findOneAndDelete({ _id: userId });
+  if (deletedUser) {
+    res.json({
+      id: deletedUser.id,
+      email: deletedUser.email,
+      name: deletedUser.name,
+    });
+  } else {
+    res.status(400);
+    throw new Error("Failed to delete the user");
+  }
 });
