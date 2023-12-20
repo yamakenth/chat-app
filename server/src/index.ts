@@ -3,9 +3,12 @@ import "colors.ts";
 import cors from "cors";
 import express, { Request, Response } from "express";
 
+import { connectDB } from "./config";
 import { PORT as PORT_FROM_ENV } from "./environment";
 
 const PORT = PORT_FROM_ENV || 8080;
+
+connectDB();
 
 const app = express();
 
