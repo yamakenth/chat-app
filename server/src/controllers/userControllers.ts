@@ -1,18 +1,40 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
+import { FilterQuery } from "mongoose";
 import { generateToken } from "../config";
 import { IUser, User } from "../models";
 
-export const getUserList = asyncHandler(
-  async (_req: Request, res: Response) => {
-    // TODO
-    res.send("getUserList to be implemented");
-  }
-);
+export const getUserList = asyncHandler(async (req: Request, res: Response) => {
+  const { nameOrEmail } = req.query;
 
-export const getUser = asyncHandler(async (_req: Request, res: Response) => {
-  // TODO
-  res.send("getUser to be implemented");
+  let filter: FilterQuery<IUser> = {};
+  if (nameOrEmail) {
+    filter = {
+      $or: [
+        { name: { $regex: nameOrEmail, $options: "i" } },
+        { email: { $regex: nameOrEmail, $options: "i" } },
+      ],
+    };
+  }
+
+  const users = await User.find(filter, { _id: 1, email: 1, name: 1 });
+  res.json(users);
+});
+
+export const getUser = asyncHandler(async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  if (!userId) {
+    res.status(400);
+    throw new Error("userId is required");
+  }
+
+  const user = await User.findById(userId, { _id: 1, email: 1, name: 1 });
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(400);
+    throw new Error("User not found");
+  }
 });
 
 export const createUser = asyncHandler(
