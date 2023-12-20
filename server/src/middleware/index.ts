@@ -1,3 +1,4 @@
 import { errorHandler, routeNotFound } from "./errorMiddleware";
+import { auth } from "./authMiddleware";
 
-export { errorHandler, routeNotFound };
+export { auth, errorHandler, routeNotFound };

@@ -61,6 +61,12 @@ export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
     throw new Error("userId is required");
   }
 
+  const loggedInUserId = req.user.id;
+  if (userId !== loggedInUserId) {
+    res.status(404);
+    throw new Error("You are not authorized to delete the user");
+  }
+
   const deletedUser = await User.findOneAndDelete({ _id: userId });
   if (deletedUser) {
     res.json({
