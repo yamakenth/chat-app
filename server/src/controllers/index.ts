@@ -4,6 +4,7 @@ import {
   getChat,
   getChatList,
 } from "./chatControllers";
+import { createMessage, getMessageList } from "./messageControllers";
 import {
   createUser,
   deleteUser,
@@ -17,6 +18,8 @@ export {
   deleteChat,
   getChat,
   getChatList,
+  createMessage,
+  getMessageList,
   createUser,
   deleteUser,
   getUser,
