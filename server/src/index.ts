@@ -3,8 +3,8 @@ import cors from "cors";
 import express, { Request, Response } from "express";
 import { connectDB } from "./config";
 import { PORT as PORT_FROM_ENV } from "./environment";
-import { errorHandler, routeNotFound } from "./middleware";
-import { userRoutes } from "./routes";
+import { auth, errorHandler, routeNotFound } from "./middleware";
+import { chatRoutes, userRoutes } from "./routes";
 
 const PORT = PORT_FROM_ENV || 8080;
 
@@ -15,6 +15,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/chats", auth, chatRoutes);
 app.use("/api/users", userRoutes);
 
 app.get("/", (_req: Request, res: Response) => {
