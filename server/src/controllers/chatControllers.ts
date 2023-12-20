@@ -7,7 +7,9 @@ export const getChatList = asyncHandler(async (req: Request, res: Response) => {
 
   const chats = await Chat.find({
     $and: [{ users: { $elemMatch: { $eq: loggedInUserId } } }],
-  }).populate("users", "email name");
+  })
+    .populate("users", "email name")
+    .populate("latestMessage");
 
   res.json(chats);
 });
@@ -21,7 +23,9 @@ export const getChat = asyncHandler(async (req: Request, res: Response) => {
     throw new Error("chatId is required");
   }
 
-  const chat = await Chat.findById(chatId).populate("users", "email name");
+  const chat = await Chat.findById(chatId)
+    .populate("users", "email name")
+    .populate("latestMessage");
   const isLoggedInUserMember = chat?.users
     .map((user) => user._id.toString())
     .includes(loggedInUserId);
