@@ -66,9 +66,31 @@ export const createUser = asyncHandler(
   }
 );
 
-export const loginUser = asyncHandler(async (_req: Request, res: Response) => {
-  // TODO
-  res.send("loginUser to be implemented");
+export const loginUser = asyncHandler(async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400);
+    throw new Error("email and password are required");
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(400);
+    throw new Error("Email not found");
+  }
+
+  const matchesStoredPassword = await user.matchesStoredPassword(password);
+  if (matchesStoredPassword) {
+    res.json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      token: generateToken(user.id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Failed to login the user");
+  }
 });
 
 export const updateUser = asyncHandler(async (_req: Request, res: Response) => {
