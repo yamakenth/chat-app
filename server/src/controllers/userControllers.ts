@@ -102,7 +102,7 @@ export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
 
   const loggedInUserId = req.user.id;
   if (userId !== loggedInUserId) {
-    res.status(404);
+    res.status(401);
     throw new Error("You are not authorized to delete the user");
   }
 
