@@ -93,11 +93,6 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-export const updateUser = asyncHandler(async (_req: Request, res: Response) => {
-  // TODO
-  res.send("updateUser to be implemented");
-});
-
 export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
   const { userId } = req.params;
   if (!userId) {

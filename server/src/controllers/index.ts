@@ -4,7 +4,6 @@ import {
   getUser,
   getUserList,
   loginUser,
-  updateUser,
 } from "./userControllers";
 
-export { createUser, deleteUser, getUser, getUserList, loginUser, updateUser };
+export { createUser, deleteUser, getUser, getUserList, loginUser };
