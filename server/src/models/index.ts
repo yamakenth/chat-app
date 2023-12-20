@@ -1,3 +1,4 @@
+import Chat, { IChat } from "./chatModel";
 import User, { IUser } from "./userModel";
 
-export { User, IUser };
+export { Chat, IChat, User, IUser };
