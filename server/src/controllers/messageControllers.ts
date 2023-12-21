@@ -11,9 +11,7 @@ export const getMessageList = asyncHandler(
     }
 
     try {
-      const messages = await Message.find({ chat: chatId })
-        .populate("sender", "name")
-        .populate("chat");
+      const messages = await Message.find({ chat: chatId });
       res.json(messages);
     } catch {
       res.status(400);
@@ -38,8 +36,6 @@ export const createMessage = asyncHandler(
         content,
         sender: loggedInUserId,
       });
-      await newMessage.populate("sender", "name");
-      await newMessage.populate("chat");
       await Chat.findByIdAndUpdate(chatId, { latestMessage: newMessage });
       res.json(newMessage);
     } catch {

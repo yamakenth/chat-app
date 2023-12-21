@@ -7,9 +7,7 @@ export const getChatList = asyncHandler(async (req: Request, res: Response) => {
 
   const chats = await Chat.find({
     $and: [{ users: { $elemMatch: { $eq: loggedInUserId } } }],
-  })
-    .populate("users", "email name")
-    .populate("latestMessage");
+  });
 
   res.json(chats);
 });
@@ -23,9 +21,7 @@ export const getChat = asyncHandler(async (req: Request, res: Response) => {
     throw new Error("chatId is required");
   }
 
-  const chat = await Chat.findById(chatId)
-    .populate("users", "email name")
-    .populate("latestMessage");
+  const chat = await Chat.findOne({ _id: chatId });
   const isLoggedInUserMember = chat?.users
     .map((user) => user._id.toString())
     .includes(loggedInUserId);
@@ -56,20 +52,15 @@ export const createChat = asyncHandler(async (req: Request, res: Response) => {
       { users: { $elemMatch: { $eq: creatorId } } },
       { users: { $elemMatch: { $eq: memberId } } },
     ],
-  }).populate("users", "email name");
+  });
   if (existingChat) {
     res.json(existingChat);
     return;
   }
 
   const newChat = await Chat.create({ users: [creatorId, memberId] });
-  const fullNewChat = await Chat.findById(newChat._id).populate(
-    "users",
-    "email name"
-  );
-
-  if (fullNewChat) {
-    res.status(201).json(fullNewChat);
+  if (newChat) {
+    res.status(201).json(newChat);
   } else {
     res.status(400);
     throw new Error("Failed to create the chat");

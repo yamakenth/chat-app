@@ -1,4 +1,9 @@
-import { Schema, Types, model } from "mongoose";
+import {
+  CallbackWithoutResultAndOptionalError,
+  Schema,
+  Types,
+  model,
+} from "mongoose";
 
 export type IMessage = {
   chat: Types.ObjectId;
@@ -14,6 +19,16 @@ const messageSchema = new Schema<IMessage>(
   },
   { timestamps: true }
 );
+
+messageSchema
+  .pre("save", function (next: CallbackWithoutResultAndOptionalError) {
+    this.populate("sender", "email name");
+    next();
+  })
+  .pre("find", function (next: CallbackWithoutResultAndOptionalError) {
+    this.populate("sender", "email name");
+    next();
+  });
 
 const Message = model<IMessage>("Message", messageSchema);
 
