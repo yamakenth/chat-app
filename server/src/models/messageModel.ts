@@ -22,11 +22,11 @@ const messageSchema = new Schema<IMessage>(
 
 messageSchema
   .pre("save", function (next: CallbackWithoutResultAndOptionalError) {
-    this.populate("sender", "email name");
+    this.populate("sender", "email name isChatbot");
     next();
   })
   .pre("find", function (next: CallbackWithoutResultAndOptionalError) {
-    this.populate("sender", "email name");
+    this.populate("sender", "email name isChatbot");
     next();
   });
 

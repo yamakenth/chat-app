@@ -44,7 +44,7 @@ export const getUser = asyncHandler(async (req: Request, res: Response) => {
 
 export const createUser = asyncHandler(
   async (req: Request<{}, {}, IUser>, res: Response) => {
-    const { email, name, password } = req.body;
+    const { email, name, password, isChatbot = false } = req.body;
     if (!name || !email || !password) {
       res.status(400);
       throw new Error("name, email, password not provided with request");
@@ -57,12 +57,13 @@ export const createUser = asyncHandler(
         throw new Error("User already exists");
       }
 
-      const newUser = await User.create({ email, name, password });
+      const newUser = await User.create({ email, name, password, isChatbot });
       res.status(201).json({
         id: newUser.id,
         email: newUser.email,
         name: newUser.name,
-        token: generateToken(newUser.id),
+        isChatbot: newUser.isChatbot,
+        token: generateToken(newUser.id, isChatbot as boolean),
       });
     } catch (error) {
       res.status(400);
@@ -72,7 +73,7 @@ export const createUser = asyncHandler(
 );
 
 export const loginUser = asyncHandler(async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password, isChatbot = false } = req.body;
   if (!email || !password) {
     res.status(400);
     throw new Error("email, password not provided with request");
@@ -95,7 +96,8 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
       id: user.id,
       email: user.email,
       name: user.name,
-      token: generateToken(user.id),
+      isChatbot: user.isChatbot,
+      token: generateToken(user.id, isChatbot),
     });
   } catch (error) {
     res.status(400);

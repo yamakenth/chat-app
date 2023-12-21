@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { Chat, Message } from "../models";
+import { generateChatbotMessage } from "../utils";
 
 export const getMessageList = asyncHandler(
   async (req: Request, res: Response) => {
@@ -54,6 +55,24 @@ export const createMessage = asyncHandler(
       });
       await Chat.findByIdAndUpdate(chatId, { latestMessage: newMessage });
       res.status(201).json(newMessage);
+    } catch (error) {
+      res.status(400);
+      throw new Error((error as Error).message);
+    }
+  }
+);
+
+export const getChatbotResponse = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { chatId } = req.params;
+    if (!chatId) {
+      res.status(400);
+      throw new Error("chatId not provided with request");
+    }
+
+    try {
+      const chatbotResponse = await generateChatbotMessage(chatId);
+      res.status(200).json(chatbotResponse);
     } catch (error) {
       res.status(400);
       throw new Error((error as Error).message);

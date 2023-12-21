@@ -20,18 +20,18 @@ const chatSchema = new Schema<IChat>(
 
 chatSchema
   .pre("save", function (next: CallbackWithoutResultAndOptionalError) {
-    this.populate("users", "email name");
+    this.populate("users", "email name isChatbot");
     next();
   })
   .pre("find", function (next: CallbackWithoutResultAndOptionalError) {
-    this.populate("users", "email name").populate(
+    this.populate("users", "email name isChatbot").populate(
       "latestMessage",
       "content sender createdAt"
     );
     next();
   })
   .pre("findOne", function (next: CallbackWithoutResultAndOptionalError) {
-    this.populate("users", "email name").populate(
+    this.populate("users", "email name isChatbot").populate(
       "latestMessage",
       "content sender createdAt"
     );
