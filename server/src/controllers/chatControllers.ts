@@ -5,11 +5,15 @@ import { Chat } from "../models";
 export const getChatList = asyncHandler(async (req: Request, res: Response) => {
   const loggedInUserId = req.user.id;
 
-  const chats = await Chat.find({
-    $and: [{ users: { $elemMatch: { $eq: loggedInUserId } } }],
-  });
-
-  res.json(chats);
+  try {
+    const chats = await Chat.find({
+      $and: [{ users: { $elemMatch: { $eq: loggedInUserId } } }],
+    });
+    res.status(200).json(chats);
+  } catch (error) {
+    res.status(400);
+    throw new Error((error as Error).message);
+  }
 });
 
 export const getChat = asyncHandler(async (req: Request, res: Response) => {
@@ -18,23 +22,23 @@ export const getChat = asyncHandler(async (req: Request, res: Response) => {
   const { chatId } = req.params;
   if (!chatId) {
     res.status(400);
-    throw new Error("chatId is required");
+    throw new Error("chatId not provided with request");
   }
 
-  const chat = await Chat.findOne({ _id: chatId });
-  const isLoggedInUserMember = chat?.users
-    .map((user) => user._id.toString())
-    .includes(loggedInUserId);
-  if (!isLoggedInUserMember) {
-    res.status(401);
-    throw new Error("You are not authorized to access the chat");
-  }
+  try {
+    const chat = await Chat.findOne({ _id: chatId });
+    const isLoggedInUserMember = chat?.users
+      .map((user) => user._id.toString())
+      .includes(loggedInUserId);
+    if (!isLoggedInUserMember) {
+      res.status(401);
+      throw new Error("Unauthorized to access chat");
+    }
 
-  if (chat) {
-    res.json(chat);
-  } else {
+    res.status(200).json(chat);
+  } catch (error) {
     res.status(400);
-    throw new Error("Chat not found");
+    throw new Error((error as Error).message);
   }
 });
 
@@ -44,26 +48,26 @@ export const createChat = asyncHandler(async (req: Request, res: Response) => {
   const { memberId } = req.body;
   if (!memberId) {
     res.status(400);
-    throw new Error("memberId is required");
+    throw new Error("memberId not provided with request");
   }
 
-  const existingChat = await Chat.findOne({
-    $and: [
-      { users: { $elemMatch: { $eq: creatorId } } },
-      { users: { $elemMatch: { $eq: memberId } } },
-    ],
-  });
-  if (existingChat) {
-    res.json(existingChat);
-    return;
-  }
+  try {
+    const existingChat = await Chat.findOne({
+      $and: [
+        { users: { $elemMatch: { $eq: creatorId } } },
+        { users: { $elemMatch: { $eq: memberId } } },
+      ],
+    });
+    if (existingChat) {
+      res.status(200).json(existingChat);
+      return;
+    }
 
-  const newChat = await Chat.create({ users: [creatorId, memberId] });
-  if (newChat) {
+    const newChat = await Chat.create({ users: [creatorId, memberId] });
     res.status(201).json(newChat);
-  } else {
+  } catch (error) {
     res.status(400);
-    throw new Error("Failed to create the chat");
+    throw new Error((error as Error).message);
   }
 });
 
@@ -73,28 +77,28 @@ export const deleteChat = asyncHandler(async (req: Request, res: Response) => {
   const { chatId } = req.params;
   if (!chatId) {
     res.status(400);
-    throw new Error("chatId is required");
+    throw new Error("chatId not provided with request");
   }
 
-  const chat = await Chat.findById(chatId);
-  if (!chat) {
+  try {
+    const chat = await Chat.findById(chatId);
+    if (!chat) {
+      res.status(400);
+      throw new Error("Chat not found");
+    }
+
+    const isCreatorsChat = chat?.users
+      .map((objectId) => objectId.toString())
+      .includes(loggedInUserId);
+    if (!isCreatorsChat) {
+      res.status(401);
+      throw new Error("Unauthorized to delete chat");
+    }
+
+    const deletedChat = await Chat.findOneAndDelete({ _id: chatId });
+    res.status(200).json(deletedChat);
+  } catch (error) {
     res.status(400);
-    throw new Error("Chat not found");
-  }
-
-  const isCreatorsChat = chat?.users
-    .map((objectId) => objectId.toString())
-    .includes(loggedInUserId);
-  if (!isCreatorsChat) {
-    res.status(401);
-    throw new Error("You are not authorized to delete the chat");
-  }
-
-  const deletedChat = await Chat.findOneAndDelete({ _id: chatId });
-  if (deletedChat) {
-    res.json(deletedChat);
-  } else {
-    res.status(400);
-    throw new Error("Failed to delete the chat");
+    throw new Error((error as Error).message);
   }
 });

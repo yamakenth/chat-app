@@ -7,15 +7,15 @@ export const getMessageList = asyncHandler(
     const { chatId } = req.params;
     if (!chatId) {
       res.status(400);
-      throw new Error("chatId is required");
+      throw new Error("chatId not provided with request");
     }
 
     try {
       const messages = await Message.find({ chat: chatId });
-      res.json(messages);
-    } catch {
+      res.status(200).json(messages);
+    } catch (error) {
       res.status(400);
-      throw new Error("Failed to get message list");
+      throw new Error((error as Error).message);
     }
   }
 );
@@ -27,7 +27,7 @@ export const createMessage = asyncHandler(
     const { chatId, content } = req.body;
     if (!chatId || !content) {
       res.status(400);
-      throw new Error("chatId and content are required");
+      throw new Error("chatId, content not provided with request");
     }
 
     try {
@@ -37,10 +37,10 @@ export const createMessage = asyncHandler(
         sender: loggedInUserId,
       });
       await Chat.findByIdAndUpdate(chatId, { latestMessage: newMessage });
-      res.json(newMessage);
-    } catch {
+      res.status(201).json(newMessage);
+    } catch (error) {
       res.status(400);
-      throw new Error("Failed to create the message");
+      throw new Error((error as Error).message);
     }
   }
 );

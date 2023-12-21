@@ -15,26 +15,26 @@ export const auth = asyncHandler(
     const isValidAuthHeader = authHeader && authHeader.startsWith("Bearer");
     if (!isValidAuthHeader) {
       res.status(401);
-      throw new Error("Authentication header is not valid");
+      throw new Error("Invalid authentication header");
     }
 
     const token = authHeader.split(" ")[1];
     if (!token) {
       res.status(401);
-      throw new Error("Unauthorized, auth token is not found");
+      throw new Error("Authentication token not provided in header");
     }
 
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as JwtPayloadWithUserId;
       const loggedInUser = await User.findById(decoded.id);
       if (!loggedInUser) {
-        throw new Error();
+        throw new Error("Unauthorized access");
       }
       req.user = loggedInUser;
       next();
-    } catch {
+    } catch (error) {
       res.status(401);
-      throw new Error("Unauthorized, auth token is not valid");
+      throw new Error((error as Error).message);
     }
   }
 );
