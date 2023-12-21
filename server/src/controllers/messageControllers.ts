@@ -11,6 +11,15 @@ export const getMessageList = asyncHandler(
     }
 
     try {
+      const loggedInUserId = req.user.id;
+      const chat = await Chat.findOne({ _id: chatId });
+      const isLoggedInUserMember = chat?.users
+        .map((user) => user.id)
+        .includes(loggedInUserId);
+      if (!isLoggedInUserMember) {
+        throw new Error("Unauthorized to access message list");
+      }
+
       const messages = await Message.find({ chat: chatId });
       res.status(200).json(messages);
     } catch (error) {
@@ -22,8 +31,6 @@ export const getMessageList = asyncHandler(
 
 export const createMessage = asyncHandler(
   async (req: Request, res: Response) => {
-    const loggedInUserId = req.user.id;
-
     const { chatId, content } = req.body;
     if (!chatId || !content) {
       res.status(400);
@@ -31,6 +38,15 @@ export const createMessage = asyncHandler(
     }
 
     try {
+      const loggedInUserId = req.user.id;
+      const chat = await Chat.findOne({ _id: chatId });
+      const isLoggedInUserMember = chat?.users
+        .map((user) => user.id)
+        .includes(loggedInUserId);
+      if (!isLoggedInUserMember) {
+        throw new Error("Unauthorized to create message");
+      }
+
       const newMessage = await Message.create({
         chat: chatId,
         content,
