@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
-import { Chat } from "../models";
+import { Chat, Message } from "../models";
 
 export const getChatList = asyncHandler(async (req: Request, res: Response) => {
   const loggedInUserId = req.user.id;
@@ -88,12 +88,14 @@ export const deleteChat = asyncHandler(async (req: Request, res: Response) => {
     }
 
     const isCreatorsChat = chat?.users
-      .map((objectId) => objectId.toString())
+      .map((objectId) => objectId.id)
       .includes(loggedInUserId);
     if (!isCreatorsChat) {
       res.status(401);
       throw new Error("Unauthorized to delete chat");
     }
+
+    await Message.deleteMany({ chat: chatId });
 
     const deletedChat = await Chat.findOneAndDelete({ _id: chatId });
     res.status(200).json(deletedChat);
