@@ -19,8 +19,10 @@ app.use("/api/chats", auth, chatRoutes);
 app.use("/api/messages", auth, messageRoutes);
 app.use("/api/users", userRoutes);
 
-app.get("/", (_req: Request, res: Response) => {
-  res.send("Successfully connected to Chat App server");
+app.get("/api", (_req: Request, res: Response) => {
+  res
+    .status(200)
+    .json({ message: "Successfully connected to Chat App server" });
 });
 
 app.use(routeNotFound);
