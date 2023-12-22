@@ -1,5 +1,7 @@
-import { ChakraProvider, Box, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import { ChatPage, Homepage } from "./pages";
 
 const App = () => {
   const [message, setMessage] = useState("");
@@ -13,11 +15,13 @@ const App = () => {
   }, []);
 
   return (
-    <ChakraProvider>
-      <Box minHeight="100vh" textAlign="center" fontSize="xl">
-        <Text>{message}</Text>
-      </Box>
-    </ChakraProvider>
+    <Box minHeight="100vh" textAlign="center" fontSize="xl">
+      <Text>{message}</Text>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/chats" element={<ChatPage />} />
+      </Routes>
+    </Box>
   );
 };
 
