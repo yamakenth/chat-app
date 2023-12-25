@@ -1,13 +1,11 @@
-import { Text } from "@chakra-ui/react";
-import { useChatContext } from "../context/ChatProvider";
+import { Container } from "@chakra-ui/react";
+import { Navbar } from "../components/navigation";
 
 const ChatPage = () => {
-  const { user } = useChatContext();
   return (
-    <>
-      <Text>ChatPage</Text>
-      <Text>{JSON.stringify(user, null, 2)}</Text>
-    </>
+    <Container bg="gray.100" minH="100vh" minW="100vw" p={0}>
+      <Navbar />
+    </Container>
   );
 };
 
