@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   Button,
+  Container,
   Heading,
   Menu,
   MenuButton,
@@ -26,40 +27,39 @@ const Navbar = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="space-between"
-      p="5px 10px"
-      w="100%"
-      bg="white"
-      borderBottom="2px"
-      borderColor="gray.200"
-    >
-      <Heading as="h1" size="lg">
-        <ChatIcon color="teal" />
-        &nbsp;&nbsp;Chat App
-      </Heading>
-      <Box>
-        <Menu>
-          <MenuButton
-            as={Button}
-            rightIcon={<ChevronDownIcon />}
-            variant="ghost"
-          >
-            <Avatar cursor="pointer" name={user.name} size="sm" />
-          </MenuButton>
-          <MenuList fontSize="md">
-            <ProfileModal>
-              <MenuItem>MyProfile</MenuItem>
-            </ProfileModal>
-            <MenuDivider />
-            <MenuItem onClick={handleLogout} color="red.500">
-              Logout
-            </MenuItem>
-          </MenuList>
-        </Menu>
-      </Box>
+    <Box w="100%" bg="white" borderBottom="2px" borderColor="gray.200">
+      <Container
+        maxW="container.lg"
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        p="5px 10px"
+      >
+        <Heading as="h1" size="lg">
+          <ChatIcon color="teal" />
+          &nbsp;&nbsp;Chat App
+        </Heading>
+        <Box>
+          <Menu>
+            <MenuButton
+              as={Button}
+              rightIcon={<ChevronDownIcon />}
+              variant="ghost"
+            >
+              <Avatar cursor="pointer" name={user.name} size="sm" />
+            </MenuButton>
+            <MenuList fontSize="md">
+              <ProfileModal>
+                <MenuItem>MyProfile</MenuItem>
+              </ProfileModal>
+              <MenuDivider />
+              <MenuItem onClick={handleLogout} color="red.500">
+                Logout
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
+      </Container>
     </Box>
   );
 };
