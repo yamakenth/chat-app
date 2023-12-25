@@ -12,6 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { FormikErrors, useFormik } from "formik";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { signUpUser } from "../../api";
 import { isEmptyObject } from "../../utils";
 
 type FormValues = {
@@ -45,6 +47,7 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -54,18 +57,20 @@ const SignUp = () => {
       confirmPassword: "",
     },
     validate,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        // TODO: post data
+        const { name, email, password } = values;
+        const data = await signUpUser(name, email, password);
         toast({
           duration: 5000,
           isClosable: true,
           position: "bottom",
           status: "success",
           title: "Registration Successful",
-          description: JSON.stringify(values), // TODO: remove
         });
+        console.log({ data }); // TODO: store as context
+        navigate("/chats");
       } catch (error) {
         toast({
           duration: 5000,
@@ -73,6 +78,7 @@ const SignUp = () => {
           position: "bottom",
           status: "error",
           title: "Error Occurred!",
+          description: (error as Error).message,
         });
       } finally {
         setIsLoading(false);
