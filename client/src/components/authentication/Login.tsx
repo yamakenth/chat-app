@@ -14,45 +14,35 @@ import { FormikErrors, useFormik } from "formik";
 import { useState } from "react";
 import { isEmptyObject } from "../../utils";
 
+const GUEST_CREDENTIALS = {
+  email: "guest@example.com",
+  password: "123456",
+};
+
 type FormValues = {
-  name: string;
   email: string;
   password: string;
-  confirmPassword: string;
 };
 
 const validate = (values: FormValues) => {
-  const { name, email, password, confirmPassword } = values;
+  const { email, password } = values;
   const errors: FormikErrors<FormValues> = {};
-  if (!name) {
-    errors.name = "Name is required";
-  }
   if (!email) {
     errors.email = "Email is required";
   }
   if (!password) {
     errors.password = "Password is required";
   }
-  if (!confirmPassword) {
-    errors.confirmPassword = "Password confirmation is required";
-  } else if (confirmPassword !== password) {
-    errors.confirmPassword = "Password confirmation must match password";
-  }
   return errors;
 };
 
-const SignUp = () => {
+const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
   const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
+    initialValues: { email: "", password: "" },
     validate,
     onSubmit: (values) => {
       setIsLoading(true);
@@ -63,7 +53,7 @@ const SignUp = () => {
           isClosable: true,
           position: "bottom",
           status: "success",
-          title: "Registration Successful",
+          title: "Login Successful",
           description: JSON.stringify(values), // TODO: remove
         });
       } catch (error) {
@@ -80,24 +70,14 @@ const SignUp = () => {
     },
   });
 
+  const populateGuestCredentials = () => {
+    formik.setFieldValue("email", GUEST_CREDENTIALS.email);
+    formik.setFieldValue("password", GUEST_CREDENTIALS.password);
+  };
+
   return (
     <form onSubmit={formik.handleSubmit} noValidate>
       <VStack>
-        <FormControl
-          isRequired
-          isInvalid={formik.touched.name && !!formik.errors.name}
-        >
-          <FormLabel>Name</FormLabel>
-          <Input
-            name="name"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.name}
-            type="text"
-            autoComplete="name"
-          />
-          <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
-        </FormControl>
         <FormControl
           isRequired
           isInvalid={formik.touched.email && !!formik.errors.email}
@@ -125,7 +105,7 @@ const SignUp = () => {
               onBlur={formik.handleBlur}
               value={formik.values.password}
               type={showPassword ? "text" : "password"}
-              autoComplete="new-password"
+              autoComplete="current-password"
             />
             <InputRightElement>
               <Button
@@ -140,35 +120,6 @@ const SignUp = () => {
           </InputGroup>
           <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
         </FormControl>
-        <FormControl
-          isRequired
-          isInvalid={
-            formik.touched.confirmPassword && !!formik.errors.confirmPassword
-          }
-        >
-          <FormLabel>Confirm Password</FormLabel>
-          <InputGroup>
-            <Input
-              name="confirmPassword"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.confirmPassword}
-              type={showPassword ? "text" : "password"}
-              autoComplete="new-password"
-            />
-            <InputRightElement>
-              <Button
-                bg="none"
-                color="gray.500"
-                onClick={() => setShowPassword(!showPassword)}
-                variant="unstyled"
-              >
-                {showPassword ? <ViewOffIcon /> : <ViewIcon />}
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-          <FormErrorMessage>{formik.errors.confirmPassword}</FormErrorMessage>
-        </FormControl>
 
         <Button
           colorScheme="teal"
@@ -180,11 +131,20 @@ const SignUp = () => {
           variant="solid"
           w="100%"
         >
-          Sign Up
+          Login
+        </Button>
+        <Button
+          colorScheme="teal"
+          onClick={populateGuestCredentials}
+          type="button"
+          variant="outline"
+          w="100%"
+        >
+          Populate with Guest Credentials
         </Button>
       </VStack>
     </form>
   );
 };
 
-export default SignUp;
+export default Login;
