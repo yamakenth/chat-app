@@ -59,7 +59,7 @@ export const createUser = asyncHandler(
 
       const newUser = await User.create({ email, name, password, isChatbot });
       res.status(201).json({
-        id: newUser.id,
+        _id: newUser.id,
         email: newUser.email,
         name: newUser.name,
         isChatbot: newUser.isChatbot,
@@ -93,7 +93,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     }
 
     res.status(200).json({
-      id: user.id,
+      _id: user.id,
       email: user.email,
       name: user.name,
       isChatbot: user.isChatbot,
@@ -122,7 +122,7 @@ export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
     const deletedUser = await User.findOneAndDelete({ _id: userId });
     if (deletedUser) {
       res.status(200).json({
-        id: deletedUser.id,
+        _id: deletedUser.id,
         email: deletedUser.email,
         name: deletedUser.name,
       });

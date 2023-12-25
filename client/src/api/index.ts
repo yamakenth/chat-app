@@ -1,4 +1,5 @@
+import deleteUser from "./deleteUser";
 import loginUser from "./loginUser";
 import signUpUser from "./signUpUser";
 
-export { loginUser, signUpUser };
+export { deleteUser, loginUser, signUpUser };
