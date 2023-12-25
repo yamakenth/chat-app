@@ -11,11 +11,11 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { useChatContext } from "../../context/ChatProvider";
+import { useUserContext } from "../../context/UserProvider";
 import { EMPTY_USER } from "../../types";
 
 const Navbar = () => {
-  const { user, setUser } = useChatContext();
+  const { user, setUser } = useUserContext();
   const navigate = useNavigate();
 
   const handleLogout = () => {

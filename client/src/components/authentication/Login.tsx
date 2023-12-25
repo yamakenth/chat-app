@@ -14,7 +14,7 @@ import { FormikErrors, useFormik } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../api";
-import { useChatContext } from "../../context/ChatProvider";
+import { useUserContext } from "../../context/UserProvider";
 import { isEmptyObject } from "../../utils";
 
 const GUEST_CREDENTIALS = {
@@ -42,7 +42,7 @@ const validate = (values: FormValues) => {
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { setUser } = useChatContext();
+  const { setUser } = useUserContext();
   const toast = useToast();
   const navigate = useNavigate();
 

@@ -1,3 +1,3 @@
-import ChatProvider from "./ChatProvider";
+import UserProvider from "./UserProvider";
 
-export { ChatProvider };
+export { UserProvider };

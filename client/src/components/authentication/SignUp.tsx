@@ -14,7 +14,7 @@ import { FormikErrors, useFormik } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signUpUser } from "../../api";
-import { useChatContext } from "../../context/ChatProvider";
+import { useUserContext } from "../../context/UserProvider";
 import { isEmptyObject } from "../../utils";
 
 type FormValues = {
@@ -47,7 +47,7 @@ const validate = (values: FormValues) => {
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { setUser } = useChatContext();
+  const { setUser } = useUserContext();
   const toast = useToast();
   const navigate = useNavigate();
 

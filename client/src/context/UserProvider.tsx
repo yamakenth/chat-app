@@ -11,16 +11,16 @@ import { useNavigate } from "react-router-dom";
 import { EMPTY_USER, User } from "../types";
 import { isEmptyObject } from "../utils";
 
-type ChatProviderProps = {
+type UserProviderProps = {
   children: ReactNode;
 };
 
-const ChatContext = createContext({
+const UserContext = createContext({
   user: EMPTY_USER,
   setUser: (() => {}) as Dispatch<SetStateAction<User>>,
 });
 
-const ChatProvider = ({ children }: ChatProviderProps) => {
+const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState(EMPTY_USER);
   const navigate = useNavigate();
 
@@ -33,14 +33,14 @@ const ChatProvider = ({ children }: ChatProviderProps) => {
   }, [navigate]);
 
   return (
-    <ChatContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser }}>
       {children}
-    </ChatContext.Provider>
+    </UserContext.Provider>
   );
 };
 
-export const useChatContext = () => {
-  return useContext(ChatContext);
+export const useUserContext = () => {
+  return useContext(UserContext);
 };
 
-export default ChatProvider;
+export default UserProvider;
