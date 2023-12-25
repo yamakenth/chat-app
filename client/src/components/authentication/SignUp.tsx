@@ -14,6 +14,7 @@ import { FormikErrors, useFormik } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signUpUser } from "../../api";
+import { useChatContext } from "../../context/ChatProvider";
 import { isEmptyObject } from "../../utils";
 
 type FormValues = {
@@ -46,6 +47,7 @@ const validate = (values: FormValues) => {
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { setUser } = useChatContext();
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -69,7 +71,8 @@ const SignUp = () => {
           status: "success",
           title: "Registration Successful",
         });
-        console.log({ data }); // TODO: store as context
+        setUser(data);
+        localStorage.setItem("userInfo", JSON.stringify(data));
         navigate("/chats");
       } catch (error) {
         toast({
