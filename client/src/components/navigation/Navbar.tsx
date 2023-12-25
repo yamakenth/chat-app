@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/UserProvider";
+import { ProfileModal } from "../modal";
 import { EMPTY_USER } from "../../types";
 
 const Navbar = () => {
@@ -49,7 +50,9 @@ const Navbar = () => {
             <Avatar cursor="pointer" name={user.name} size="sm" />
           </MenuButton>
           <MenuList fontSize="md">
-            <MenuItem>MyProfile</MenuItem>
+            <ProfileModal>
+              <MenuItem>MyProfile</MenuItem>
+            </ProfileModal>
             <MenuDivider />
             <MenuItem onClick={handleLogout} color="red.500">
               Logout
