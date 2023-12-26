@@ -2,7 +2,7 @@ import { Container, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getChatList } from "../api";
 import { ChatBox, MyChats, Navbar } from "../components";
-import { useUserContext } from "../context/UserProvider";
+import { useUserContext } from "../context";
 import { Chat, EMPTY_CHAT } from "../types";
 
 const ChatPage = () => {

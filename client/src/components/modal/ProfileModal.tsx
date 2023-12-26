@@ -18,7 +18,7 @@ import { ViewIcon } from "@chakra-ui/icons";
 import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteUser } from "../../api";
-import { useUserContext } from "../../context/UserProvider";
+import { useUserContext } from "../../context";
 import { EMPTY_USER } from "../../types";
 
 type ProfileModalProps = {

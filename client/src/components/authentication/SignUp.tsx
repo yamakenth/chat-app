@@ -14,7 +14,7 @@ import { FormikErrors, useFormik } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signUpUser } from "../../api";
-import { useUserContext } from "../../context/UserProvider";
+import { useUserContext } from "../../context";
 import { isEmptyObject } from "../../utils";
 
 type FormValues = {

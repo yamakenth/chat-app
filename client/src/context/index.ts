@@ -1,3 +1,3 @@
-import UserProvider from "./UserProvider";
+import UserProvider, { useUserContext } from "./UserProvider";
 
-export { UserProvider };
+export { useUserContext, UserProvider };
