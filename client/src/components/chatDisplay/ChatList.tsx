@@ -1,13 +1,4 @@
-import { SearchIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Button,
-  FormControl,
-  Input,
-  InputGroup,
-  InputRightElement,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, VStack } from "@chakra-ui/react";
 import { Dispatch, SetStateAction } from "react";
 import ChatDisplay from "./ChatDisplay";
 import { Chat } from "../../types";
@@ -29,16 +20,6 @@ const ChatList = ({ chats, selectedChat, setSelectedChat }: ChatListProps) => {
       gap={3}
       overflow="hidden"
     >
-      <FormControl>
-        <InputGroup>
-          <Input placeholder="Search by name" />
-          <InputRightElement>
-            <Button variant="ghost">
-              <SearchIcon />
-            </Button>
-          </InputRightElement>
-        </InputGroup>
-      </FormControl>
       {chats.length > 0 ? (
         <VStack flex={1} bg="gray.100" borderRadius="lg" p={2}>
           {chats.map((chat) => (
