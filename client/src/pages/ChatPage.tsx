@@ -1,17 +1,43 @@
-import { Container } from "@chakra-ui/react";
-import { useState } from "react";
+import { Container, useToast } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { getChatList } from "../api";
 import { ChatBox, MyChats, Navbar } from "../components";
-import { EMPTY_CHAT } from "../types";
+import { useUserContext } from "../context/UserProvider";
+import { Chat, EMPTY_CHAT } from "../types";
 
 const ChatPage = () => {
+  const toast = useToast();
   const [selectedChat, setSelectedChat] = useState(EMPTY_CHAT);
+  const { user } = useUserContext();
+  const [chats, setChats] = useState<Chat[]>([]);
+
+  useEffect(() => {
+    if (!user._id) {
+      return;
+    }
+    (async () => {
+      try {
+        const data = await getChatList(user.token);
+        setChats(data);
+      } catch (error) {
+        toast({
+          title: "Error Occurred!",
+          description: (error as Error).message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+      }
+    })();
+  }, [toast, user]);
 
   return (
     <Container
       display="flex"
       flexDir="column"
-      bg="gray.100"
-      minH="100vh"
+      bg="gray.200"
+      h="100vh"
       minW="100vw"
       p={0}
     >
@@ -25,6 +51,9 @@ const ChatPage = () => {
         py={3}
       >
         <MyChats
+          chats={chats}
+          selectedChat={selectedChat}
+          setSelectedChat={setSelectedChat}
           display={{ base: selectedChat._id ? "none" : "flex", md: "flex" }}
           flex={{ base: 1, md: 1 }}
         />

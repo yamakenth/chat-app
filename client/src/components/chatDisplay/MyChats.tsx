@@ -1,10 +1,21 @@
 import { Box, BoxProps } from "@chakra-ui/react";
-import ChatSearch from "./ChatSearch";
+import { Dispatch, SetStateAction } from "react";
 import ChatList from "./ChatList";
+import ChatSearch from "./ChatSearch";
+import { Chat } from "../../types";
 
-type MyChatsProps = BoxProps & {};
+type MyChatsProps = BoxProps & {
+  chats: Chat[];
+  selectedChat: Chat;
+  setSelectedChat: Dispatch<SetStateAction<Chat>>;
+};
 
-const MyChats = ({ ...props }: MyChatsProps) => {
+const MyChats = ({
+  chats,
+  selectedChat,
+  setSelectedChat,
+  ...props
+}: MyChatsProps) => {
   return (
     <Box
       flexDir="column"
@@ -16,7 +27,11 @@ const MyChats = ({ ...props }: MyChatsProps) => {
       {...props}
     >
       <ChatSearch />
-      <ChatList />
+      <ChatList
+        chats={chats}
+        selectedChat={selectedChat}
+        setSelectedChat={setSelectedChat}
+      />
     </Box>
   );
 };
