@@ -1,4 +1,6 @@
 import { Box, BoxProps } from "@chakra-ui/react";
+import ChatSearch from "./ChatSearch";
+import ChatList from "./ChatList";
 
 type MyChatsProps = BoxProps & {};
 
@@ -13,7 +15,8 @@ const MyChats = ({ ...props }: MyChatsProps) => {
       borderWidth="1px"
       {...props}
     >
-      MyChats
+      <ChatSearch />
+      <ChatList />
     </Box>
   );
 };
