@@ -24,6 +24,7 @@ const MyChats = ({
       bg="white"
       borderRadius="lg"
       borderWidth="1px"
+      overflowY="hidden"
       {...props}
     >
       <ChatSearch />

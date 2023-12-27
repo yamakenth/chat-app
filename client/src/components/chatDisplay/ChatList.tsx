@@ -18,7 +18,7 @@ const ChatList = ({ chats, selectedChat, setSelectedChat }: ChatListProps) => {
       display="flex"
       flexDir="column"
       gap={3}
-      overflow="hidden"
+      overflowY="auto"
     >
       {chats.length > 0 ? (
         <VStack flex={1} bg="gray.100" borderRadius="lg" p={2}>

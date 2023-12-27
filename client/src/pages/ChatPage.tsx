@@ -37,8 +37,8 @@ const ChatPage = () => {
       display="flex"
       flexDir="column"
       bg="gray.200"
-      h="100vh"
-      minW="100vw"
+      maxW="100vw"
+      h="100%"
       p={0}
     >
       <Navbar />
@@ -48,6 +48,7 @@ const ChatPage = () => {
         justifyContent="space-between"
         gap={3}
         maxW="container.lg"
+        maxH="92vh"
         py={3}
       >
         <MyChats

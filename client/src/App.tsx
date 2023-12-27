@@ -4,7 +4,7 @@ import { ChatPage, Homepage } from "./pages";
 
 const App = () => {
   return (
-    <Box minHeight="100vh" textAlign="center" fontSize="xl">
+    <Box h="100vh" w="100vw" textAlign="center" fontSize="xl">
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/chats" element={<ChatPage />} />

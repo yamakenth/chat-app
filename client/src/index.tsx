@@ -1,3 +1,4 @@
+import "./index.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
 import * as ReactDOM from "react-dom/client";

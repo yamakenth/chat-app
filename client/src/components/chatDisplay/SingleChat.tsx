@@ -1,8 +1,15 @@
+import {
+  Avatar,
+  Box,
+  Spinner,
+  Text,
+  Tooltip,
+  useToast,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { Message } from "../../types";
 import { getMessageList } from "../../api";
 import { useUserContext } from "../../context";
-import { Box, useToast } from "@chakra-ui/react";
+import { Message } from "../../types";
 
 type SingleChatProps = {
   chatId: string;
@@ -10,6 +17,7 @@ type SingleChatProps = {
 
 const SingleChat = ({ chatId }: SingleChatProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useUserContext();
   const toast = useToast();
 
@@ -18,6 +26,7 @@ const SingleChat = ({ chatId }: SingleChatProps) => {
       if (!user._id) {
         return;
       }
+      setIsLoading(true);
       try {
         const data = await getMessageList(chatId, user.token);
         setMessages(data);
@@ -30,11 +39,64 @@ const SingleChat = ({ chatId }: SingleChatProps) => {
           isClosable: true,
           position: "bottom-left",
         });
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [chatId, toast, user]);
 
-  return <Box maxW="100%">{JSON.stringify(messages, null, 2)}</Box>;
+  return (
+    <>
+      {isLoading ? (
+        <Spinner size="xl" w={20} h={20} alignSelf="center" margin="auto" />
+      ) : (
+        <Box overflowY="auto">
+          {messages.length === 0 ? (
+            <Text fontSize="md" color="gray.700">
+              No messages to show
+            </Text>
+          ) : (
+            messages.map((m) => (
+              <Box
+                display="flex"
+                flexDir={m.sender?._id !== user._id ? "row" : "row-reverse"}
+                justifyContent="space-between"
+                gap={1}
+                key={m._id}
+              >
+                <Tooltip
+                  label={m.sender?.name}
+                  placement="bottom-start"
+                  hasArrow
+                >
+                  <Avatar
+                    mt="7px"
+                    mr={1}
+                    size="sm"
+                    cursor="pointer"
+                    name={m.sender?.name}
+                  />
+                </Tooltip>
+                <Box
+                  bg={m.sender?._id === user._id ? "#bee3f8" : "#b9f5d0"}
+                  p="10px 20px"
+                  borderRadius="20px"
+                  maxW="75%"
+                  ml={m.sender?._id === user._id ? "auto" : "0"}
+                  mr={m.sender?._id === user._id ? "0" : "auto"}
+                  mb={2}
+                >
+                  <Text fontSize="md" textAlign="left">
+                    {m.content}
+                  </Text>
+                </Box>
+              </Box>
+            ))
+          )}
+        </Box>
+      )}
+    </>
+  );
 };
 
 export default SingleChat;

@@ -35,6 +35,7 @@ const ChatBox = ({ selectedChat, setSelectedChat, ...props }: ChatBoxProps) => {
             display="flex"
             justifyContent="space-between"
             alignItems="center"
+            mb={3}
           >
             <IconButton
               display={{ base: "flex", md: "none" }}
@@ -45,7 +46,18 @@ const ChatBox = ({ selectedChat, setSelectedChat, ...props }: ChatBoxProps) => {
             <Text fontSize="2xl">{sender.name}</Text>
             <ProfileModal user={sender} />
           </Box>
-          <SingleChat chatId={selectedChat._id} />
+          <Box
+            display="flex"
+            flexDir="column"
+            p={3}
+            bg="gray.100"
+            w="100%"
+            h="100%"
+            borderRadius="lg"
+            overflowY="hidden"
+          >
+            <SingleChat chatId={selectedChat._id} />
+          </Box>
         </>
       ) : (
         <Box
