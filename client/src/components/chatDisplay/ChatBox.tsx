@@ -1,8 +1,22 @@
-import { Box, BoxProps } from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import { Box, BoxProps, IconButton, Text } from "@chakra-ui/react";
+import { Dispatch, SetStateAction } from "react";
+import { useUserContext } from "../../context";
+import { ProfileModal } from "../modal";
+import SingleChat from "./SingleChat";
+import { Chat, EMPTY_CHAT, EMPTY_USER } from "../../types";
 
-type ChatBoxProps = BoxProps & {};
+type ChatBoxProps = BoxProps & {
+  selectedChat: Chat;
+  setSelectedChat: Dispatch<SetStateAction<Chat>>;
+};
 
-const ChatBox = ({ ...props }: ChatBoxProps) => {
+const ChatBox = ({ selectedChat, setSelectedChat, ...props }: ChatBoxProps) => {
+  const { user } = useUserContext();
+
+  const sender =
+    selectedChat.users?.filter((u) => u._id !== user._id)?.[0] || EMPTY_USER;
+
   return (
     <Box
       flexDir="column"
@@ -11,9 +25,40 @@ const ChatBox = ({ ...props }: ChatBoxProps) => {
       bg="white"
       borderRadius="lg"
       borderWidth="1px"
+      maxW="100%"
       {...props}
     >
-      ChatBox
+      {selectedChat._id != null ? (
+        <>
+          <Box
+            w="100%"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <IconButton
+              display={{ base: "flex", md: "none" }}
+              icon={<ArrowBackIcon />}
+              onClick={() => setSelectedChat(EMPTY_CHAT)}
+              aria-label="Back to chat view"
+            />
+            <Text fontSize="2xl">{sender.name}</Text>
+            <ProfileModal user={sender} />
+          </Box>
+          <SingleChat chatId={selectedChat._id} />
+        </>
+      ) : (
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          h="100%"
+        >
+          <Text fontSize="3xl" pb={3}>
+            Click on a user to start chatting
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 };

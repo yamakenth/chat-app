@@ -15,23 +15,26 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { ViewIcon } from "@chakra-ui/icons";
-import { ReactNode } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteUser } from "../../api";
-import { useUserContext } from "../../context";
-import { EMPTY_USER } from "../../types";
+import { EMPTY_USER, User } from "../../types";
 
 type ProfileModalProps = {
+  user: User;
+  setUser?: Dispatch<SetStateAction<User>>;
   children?: ReactNode;
 };
 
-const ProfileModal = ({ children }: ProfileModalProps) => {
-  const { user, setUser } = useUserContext();
+const ProfileModal = ({ user, setUser, children }: ProfileModalProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const toast = useToast();
   const navigate = useNavigate();
 
   const handleAccountDeletion = async () => {
+    if (!setUser) {
+      return;
+    }
     onClose();
     if (window.confirm("Are you sure you'd like to delete your account?")) {
       try {
@@ -94,13 +97,15 @@ const ProfileModal = ({ children }: ProfileModalProps) => {
 
           <ModalFooter>
             <VStack w="100%">
-              <Button
-                colorScheme="red"
-                onClick={handleAccountDeletion}
-                w="100%"
-              >
-                Delete Account
-              </Button>
+              {setUser && (
+                <Button
+                  colorScheme="red"
+                  onClick={handleAccountDeletion}
+                  w="100%"
+                >
+                  Delete Account
+                </Button>
+              )}
               <Button colorScheme="teal" onClick={onClose} w="100%">
                 Close
               </Button>

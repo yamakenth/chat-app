@@ -56,10 +56,14 @@ const ChatPage = () => {
           setSelectedChat={setSelectedChat}
           display={{ base: selectedChat._id ? "none" : "flex", md: "flex" }}
           flex={{ base: 1, md: 1 }}
+          maxW="100%"
         />
         <ChatBox
+          selectedChat={selectedChat}
+          setSelectedChat={setSelectedChat}
           display={{ base: selectedChat._id ? "flex" : "none", md: "flex" }}
           flex={{ base: 1, md: 2 }}
+          maxW="100%"
         />
       </Container>
     </Container>

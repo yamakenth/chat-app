@@ -49,7 +49,7 @@ const Navbar = () => {
               <Avatar cursor="pointer" name={user.name} size="sm" />
             </MenuButton>
             <MenuList fontSize="md">
-              <ProfileModal>
+              <ProfileModal user={user} setUser={setUser}>
                 <MenuItem>MyProfile</MenuItem>
               </ProfileModal>
               <MenuDivider />
