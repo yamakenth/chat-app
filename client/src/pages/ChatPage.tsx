@@ -4,6 +4,7 @@ import { getChatList } from "../api";
 import { ChatBox, MyChats, Navbar } from "../components";
 import { useUserContext } from "../context";
 import { Chat, EMPTY_CHAT } from "../types";
+import { sortChatListByMostRecent } from "../utils";
 
 const ChatPage = () => {
   const toast = useToast();
@@ -17,7 +18,8 @@ const ChatPage = () => {
     }
     (async () => {
       try {
-        const data = await getChatList(user.token);
+        const data: Chat[] = await getChatList(user.token);
+        sortChatListByMostRecent(data);
         setChats(data);
       } catch (error) {
         toast({

@@ -19,6 +19,7 @@ export interface Message {
   chat?: string;
   content?: string;
   sender?: User;
+  createdAt?: string;
 }
 
 export const EMPTY_MESSAGE: Message = {
@@ -26,6 +27,7 @@ export const EMPTY_MESSAGE: Message = {
   chat: undefined,
   content: undefined,
   sender: undefined,
+  createdAt: undefined,
 };
 
 export interface Chat {
