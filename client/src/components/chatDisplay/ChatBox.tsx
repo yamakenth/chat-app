@@ -2,6 +2,7 @@ import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Box, BoxProps, IconButton, Text } from "@chakra-ui/react";
 import { Dispatch, SetStateAction } from "react";
 import { useUserContext } from "../../context";
+import NewMessageForm from "./NewMessageForm";
 import { ProfileModal } from "../modal";
 import SingleChat from "./SingleChat";
 import { Chat, EMPTY_CHAT, EMPTY_USER } from "../../types";
@@ -57,6 +58,7 @@ const ChatBox = ({ selectedChat, setSelectedChat, ...props }: ChatBoxProps) => {
             overflowY="hidden"
           >
             <SingleChat chatId={selectedChat._id} />
+            <NewMessageForm />
           </Box>
         </>
       ) : (
