@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { FormikErrors, useFormik } from "formik";
 import { useState } from "react";
-import { sendMessage } from "../../api";
+import { promptChatbotToRespond, sendMessage } from "../../api";
 import { useUserContext } from "../../context";
 
 type FormValues = {
@@ -42,6 +42,7 @@ const NewMessageForm = ({ chatId }: newMessageFormProps) => {
       try {
         await sendMessage(chatId, values.newMessage, user.token);
         formik.setFieldValue("newMessage", "");
+        await promptChatbotToRespond(chatId, user.token);
       } catch (error) {
         toast({
           duration: 5000,
