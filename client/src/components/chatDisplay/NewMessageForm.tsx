@@ -5,14 +5,71 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useToast,
 } from "@chakra-ui/react";
+import { FormikErrors, useFormik } from "formik";
+import { useState } from "react";
+import { sendMessage } from "../../api";
+import { useUserContext } from "../../context";
 
-const NewMessageForm = () => {
+type FormValues = {
+  newMessage: string;
+};
+
+const validate = (values: FormValues) => {
+  const { newMessage } = values;
+  const errors: FormikErrors<FormValues> = {};
+  if (!newMessage || newMessage.length === 0) {
+    errors.newMessage = "Message cannot be empty";
+  }
+  return errors;
+};
+
+type newMessageFormProps = {
+  chatId: string;
+};
+
+const NewMessageForm = ({ chatId }: newMessageFormProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { user } = useUserContext();
+  const toast = useToast();
+
+  const formik = useFormik({
+    initialValues: { newMessage: "" },
+    validate,
+    onSubmit: async (values) => {
+      setIsLoading(true);
+      try {
+        await sendMessage(chatId, values.newMessage, user.token);
+        formik.setFieldValue("newMessage", "");
+      } catch (error) {
+        toast({
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+          status: "error",
+          title: "Error Occurred!",
+          description: (error as Error).message,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    },
+  });
+
   return (
-    <form>
-      <FormControl isRequired>
+    <form onSubmit={formik.handleSubmit} noValidate>
+      <FormControl
+        isRequired
+        isInvalid={formik.touched.newMessage && !!formik.errors.newMessage}
+      >
         <InputGroup>
           <Input
+            name="newMessage"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.newMessage}
+            type="text"
             variant="filled"
             bg="gray.200"
             borderRadius="2xl"
@@ -25,6 +82,7 @@ const NewMessageForm = () => {
               borderRadius="50%"
               size="sm"
               icon={<ArrowUpIcon color="white" />}
+              isLoading={isLoading}
               aria-label="Submit message"
             />
           </InputRightElement>

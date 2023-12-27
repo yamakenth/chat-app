@@ -58,7 +58,7 @@ const ChatBox = ({ selectedChat, setSelectedChat, ...props }: ChatBoxProps) => {
             overflowY="hidden"
           >
             <SingleChat chatId={selectedChat._id} />
-            <NewMessageForm />
+            <NewMessageForm chatId={selectedChat._id} />
           </Box>
         </>
       ) : (
