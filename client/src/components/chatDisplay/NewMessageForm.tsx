@@ -61,7 +61,8 @@ const NewMessageForm = ({
         setMessages([...messages, data]);
         socket.emit("newMessage", data);
         if (isChatbotChat) {
-          await promptChatbotToRespond(chatId, user.token);
+          const response = await promptChatbotToRespond(chatId, user.token);
+          setMessages([...messages, data, response]);
         }
       } catch (error) {
         toast({
