@@ -1,9 +1,10 @@
 import { Container, useToast } from "@chakra-ui/react";
+import { Chat } from "@types";
 import { useEffect, useState } from "react";
 import { getChatList } from "../api";
 import { ChatBox, MyChats, Navbar } from "../components";
+import { EMPTY_CHAT } from "../constants";
 import { useUserContext } from "../context";
-import { Chat, EMPTY_CHAT } from "../types";
 import { sortChatListByMostRecent } from "../utils";
 
 const ChatPage = () => {

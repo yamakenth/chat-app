@@ -1,3 +1,4 @@
+import { User } from "@types";
 import {
   Dispatch,
   ReactNode,
@@ -8,7 +9,7 @@ import {
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { EMPTY_USER, User } from "../types";
+import { EMPTY_USER } from "../constants";
 import { isEmptyObject } from "../utils";
 
 type UserProviderProps = {

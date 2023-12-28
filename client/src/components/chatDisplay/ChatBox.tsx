@@ -1,22 +1,38 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Box, BoxProps, IconButton, Text } from "@chakra-ui/react";
-import { Dispatch, SetStateAction } from "react";
+import {
+  Chat,
+  Message,
+  WsClientToServerEvents,
+  WsServerToClientEvents,
+} from "@types";
+import { Dispatch, SetStateAction, useState } from "react";
+import { io, Socket } from "socket.io-client";
+import { EMPTY_CHAT, EMPTY_USER } from "../../constants";
 import { useUserContext } from "../../context";
 import NewMessageForm from "./NewMessageForm";
 import { ProfileModal } from "../modal";
 import SingleChat from "./SingleChat";
-import { Chat, EMPTY_CHAT, EMPTY_USER } from "../../types";
+
+const SERVER_ENDPOINT = "http://localhost:8080";
 
 type ChatBoxProps = BoxProps & {
   selectedChat: Chat;
   setSelectedChat: Dispatch<SetStateAction<Chat>>;
 };
 
+const socket: Socket<WsServerToClientEvents, WsClientToServerEvents> =
+  io(SERVER_ENDPOINT);
+
 const ChatBox = ({ selectedChat, setSelectedChat, ...props }: ChatBoxProps) => {
+  const [messages, setMessages] = useState<Message[]>([]);
   const { user } = useUserContext();
 
   const sender =
     selectedChat.users?.filter((u) => u._id !== user._id)?.[0] || EMPTY_USER;
+  const isChatbotChat = !!selectedChat.users?.find(
+    (u) => u.isChatbot === "true"
+  );
 
   return (
     <Box
@@ -57,8 +73,19 @@ const ChatBox = ({ selectedChat, setSelectedChat, ...props }: ChatBoxProps) => {
             borderRadius="lg"
             overflowY="hidden"
           >
-            <SingleChat chatId={selectedChat._id} />
-            <NewMessageForm chatId={selectedChat._id} />
+            <SingleChat
+              chatId={selectedChat._id}
+              socket={socket}
+              messages={messages}
+              setMessages={setMessages}
+            />
+            <NewMessageForm
+              chatId={selectedChat._id}
+              socket={socket}
+              isChatbotChat={isChatbotChat}
+              messages={messages}
+              setMessages={setMessages}
+            />
           </Box>
         </>
       ) : (

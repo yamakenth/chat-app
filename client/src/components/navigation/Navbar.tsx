@@ -12,9 +12,9 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { EMPTY_USER } from "../../constants";
 import { useUserContext } from "../../context";
 import { ProfileModal } from "../modal";
-import { EMPTY_USER } from "../../types";
 
 const Navbar = () => {
   const { user, setUser } = useUserContext();

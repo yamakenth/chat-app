@@ -6,20 +6,43 @@ import {
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import {
+  Message,
+  WsClientToServerEvents,
+  WsServerToClientEvents,
+} from "@types";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Socket } from "socket.io-client";
 import { getMessageList } from "../../api";
 import { useUserContext } from "../../context";
-import { Message } from "../../types";
 
 type SingleChatProps = {
   chatId: string;
+  socket: Socket<WsServerToClientEvents, WsClientToServerEvents>;
+  messages: Message[];
+  setMessages: Dispatch<SetStateAction<Message[]>>;
 };
 
-const SingleChat = ({ chatId }: SingleChatProps) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+let selectedChatIdCompare: string | undefined;
+
+const SingleChat = ({
+  chatId,
+  socket,
+  messages,
+  setMessages,
+}: SingleChatProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isSocketConnected, setIsSocketConnected] = useState(false);
   const { user } = useUserContext();
   const toast = useToast();
+
+  useEffect(() => {
+    if (!user._id) {
+      return;
+    }
+    socket.emit("setup", user._id);
+    socket.on("connected", () => setIsSocketConnected(true));
+  }, [socket, user]);
 
   useEffect(() => {
     (async () => {
@@ -30,6 +53,7 @@ const SingleChat = ({ chatId }: SingleChatProps) => {
       try {
         const data = await getMessageList(chatId, user.token);
         setMessages(data);
+        socket.emit("joinChat", chatId);
       } catch (error) {
         toast({
           title: "Error Occurred!",
@@ -43,7 +67,22 @@ const SingleChat = ({ chatId }: SingleChatProps) => {
         setIsLoading(false);
       }
     })();
-  }, [chatId, toast, user]);
+
+    selectedChatIdCompare = chatId;
+  }, [chatId, setMessages, socket, toast, user]);
+
+  useEffect(() => {
+    socket.on("messageReceived", (newMessageReceived) => {
+      if (
+        !selectedChatIdCompare ||
+        selectedChatIdCompare !== newMessageReceived.chat?._id
+      ) {
+        // TODO: implement with notification functionality
+      } else {
+        setMessages([...messages, newMessageReceived]);
+      }
+    });
+  });
 
   return (
     <>

@@ -7,8 +7,14 @@ import {
   InputRightElement,
   useToast,
 } from "@chakra-ui/react";
+import {
+  Message,
+  WsClientToServerEvents,
+  WsServerToClientEvents,
+} from "@types";
 import { FormikErrors, useFormik } from "formik";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Socket } from "socket.io-client";
 import { promptChatbotToRespond, sendMessage } from "../../api";
 import { useUserContext } from "../../context";
 
@@ -27,9 +33,19 @@ const validate = (values: FormValues) => {
 
 type newMessageFormProps = {
   chatId: string;
+  socket: Socket<WsServerToClientEvents, WsClientToServerEvents>;
+  isChatbotChat: boolean;
+  messages: Message[];
+  setMessages: Dispatch<SetStateAction<Message[]>>;
 };
 
-const NewMessageForm = ({ chatId }: newMessageFormProps) => {
+const NewMessageForm = ({
+  chatId,
+  socket,
+  isChatbotChat,
+  messages,
+  setMessages,
+}: newMessageFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useUserContext();
   const toast = useToast();
@@ -40,9 +56,13 @@ const NewMessageForm = ({ chatId }: newMessageFormProps) => {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        await sendMessage(chatId, values.newMessage, user.token);
+        const data = await sendMessage(chatId, values.newMessage, user.token);
         formik.setFieldValue("newMessage", "");
-        await promptChatbotToRespond(chatId, user.token);
+        setMessages([...messages, data]);
+        socket.emit("newMessage", data);
+        if (isChatbotChat) {
+          await promptChatbotToRespond(chatId, user.token);
+        }
       } catch (error) {
         toast({
           duration: 5000,

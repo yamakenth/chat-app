@@ -1,7 +1,7 @@
 import { Box, VStack } from "@chakra-ui/react";
+import { Chat } from "@types";
 import { Dispatch, SetStateAction } from "react";
 import ChatDisplay from "./ChatDisplay";
-import { Chat } from "../../types";
 import { ChatLoading } from "../loading";
 
 type ChatListProps = {

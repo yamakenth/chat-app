@@ -15,10 +15,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { ViewIcon } from "@chakra-ui/icons";
+import { User } from "@types";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteUser } from "../../api";
-import { EMPTY_USER, User } from "../../types";
+import { EMPTY_USER } from "../../constants";
 
 type ProfileModalProps = {
   user: User;

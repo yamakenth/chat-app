@@ -1,7 +1,7 @@
 import { Box, Text } from "@chakra-ui/react";
+import { Chat } from "@types";
 import { Dispatch, SetStateAction } from "react";
 import { useUserContext } from "../../context";
-import { Chat } from "../../types";
 
 type ChatProps = {
   chat: Chat;

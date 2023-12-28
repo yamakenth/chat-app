@@ -1,8 +1,8 @@
 import { Box, BoxProps } from "@chakra-ui/react";
+import { Chat } from "@types";
 import { Dispatch, SetStateAction } from "react";
 import ChatList from "./ChatList";
 import ChatSearch from "./ChatSearch";
-import { Chat } from "../../types";
 
 type MyChatsProps = BoxProps & {
   chats: Chat[];
