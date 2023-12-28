@@ -16,7 +16,7 @@ export const EMPTY_USER: User = {
 
 export interface Message {
   _id?: string;
-  chat?: string;
+  chat?: Chat;
   content?: string;
   sender?: User;
   createdAt?: string;

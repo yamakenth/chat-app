@@ -21,7 +21,7 @@ export const getMessageList = asyncHandler(
         throw new Error("Unauthorized to access message list");
       }
 
-      const messages = await Message.find({ chat: chatId });
+      const messages = await Message.find({ chat: chatId }).populate("chat");
       res.status(200).json(messages);
     } catch (error) {
       res.status(400);
@@ -53,6 +53,7 @@ export const createMessage = asyncHandler(
         content,
         sender: loggedInUserId,
       });
+      await newMessage.populate("chat");
       await Chat.findByIdAndUpdate(chatId, { latestMessage: newMessage });
       res.status(201).json(newMessage);
     } catch (error) {
