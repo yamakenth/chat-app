@@ -7,6 +7,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import {
+  Chat,
   Message,
   WsClientToServerEvents,
   WsServerToClientEvents,
@@ -24,6 +25,8 @@ type SingleChatProps = {
   messages: Message[];
   setMessages: Dispatch<SetStateAction<Message[]>>;
   setIsSocketConnected: Dispatch<SetStateAction<boolean>>;
+  notifications: Chat[];
+  setNotifications: Dispatch<SetStateAction<Chat[]>>;
 };
 
 let selectedChatIdCompare: string | undefined;
@@ -41,6 +44,8 @@ const SingleChat = ({
   messages,
   setMessages,
   setIsSocketConnected,
+  notifications,
+  setNotifications,
 }: SingleChatProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -87,12 +92,16 @@ const SingleChat = ({
   useEffect(() => {
     socket.on("messageReceived", (newMessageReceived) => {
       if (
-        !selectedChatIdCompare ||
-        selectedChatIdCompare !== newMessageReceived.chat?._id
+        selectedChatIdCompare &&
+        selectedChatIdCompare === newMessageReceived.chat?._id
       ) {
-        // TODO: implement with notification functionality
-      } else {
         setMessages([...messages, newMessageReceived]);
+      } else if (!notifications.includes(newMessageReceived)) {
+        const { chat } = newMessageReceived;
+        if (!chat) {
+          return;
+        }
+        setNotifications([chat, ...notifications]);
       }
     });
   });

@@ -8,10 +8,11 @@ import { useUserContext } from "../context";
 import { sortChatListByMostRecent } from "../utils";
 
 const ChatPage = () => {
-  const toast = useToast();
   const [selectedChat, setSelectedChat] = useState(EMPTY_CHAT);
-  const { user } = useUserContext();
+  const [notifications, setNotifications] = useState<Chat[]>([]);
   const [chats, setChats] = useState<Chat[]>([]);
+  const { user } = useUserContext();
+  const toast = useToast();
 
   useEffect(() => {
     if (!user._id) {
@@ -44,7 +45,11 @@ const ChatPage = () => {
       h="100%"
       p={0}
     >
-      <Navbar />
+      <Navbar
+        setSelectedChat={setSelectedChat}
+        notifications={notifications}
+        setNotifications={setNotifications}
+      />
       <Container
         flex={1}
         display="flex"
@@ -65,6 +70,8 @@ const ChatPage = () => {
         <ChatBox
           selectedChat={selectedChat}
           setSelectedChat={setSelectedChat}
+          notifications={notifications}
+          setNotifications={setNotifications}
           display={{ base: selectedChat._id ? "flex" : "none", md: "flex" }}
           flex={{ base: 1, md: 2 }}
           maxW="100%"

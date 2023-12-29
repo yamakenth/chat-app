@@ -19,12 +19,20 @@ const SERVER_ENDPOINT = "http://localhost:8080";
 type ChatBoxProps = BoxProps & {
   selectedChat: Chat;
   setSelectedChat: Dispatch<SetStateAction<Chat>>;
+  notifications: Chat[];
+  setNotifications: Dispatch<SetStateAction<Chat[]>>;
 };
 
 const socket: Socket<WsServerToClientEvents, WsClientToServerEvents> =
   io(SERVER_ENDPOINT);
 
-const ChatBox = ({ selectedChat, setSelectedChat, ...props }: ChatBoxProps) => {
+const ChatBox = ({
+  selectedChat,
+  setSelectedChat,
+  notifications,
+  setNotifications,
+  ...props
+}: ChatBoxProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
@@ -81,6 +89,8 @@ const ChatBox = ({ selectedChat, setSelectedChat, ...props }: ChatBoxProps) => {
               messages={messages}
               setMessages={setMessages}
               setIsSocketConnected={setIsSocketConnected}
+              notifications={notifications}
+              setNotifications={setNotifications}
             />
             <NewMessageForm
               chatId={selectedChat._id}
