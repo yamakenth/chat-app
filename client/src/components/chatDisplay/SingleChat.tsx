@@ -12,7 +12,9 @@ import {
   WsServerToClientEvents,
 } from "@types";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import Lottie from "react-lottie";
 import { Socket } from "socket.io-client";
+import animationData from "../../animations/typing.json";
 import { getMessageList } from "../../api";
 import { useUserContext } from "../../context";
 
@@ -21,18 +23,27 @@ type SingleChatProps = {
   socket: Socket<WsServerToClientEvents, WsClientToServerEvents>;
   messages: Message[];
   setMessages: Dispatch<SetStateAction<Message[]>>;
+  setIsSocketConnected: Dispatch<SetStateAction<boolean>>;
 };
 
 let selectedChatIdCompare: string | undefined;
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData,
+  renderSettings: { preserveAspectRatio: "xMidYMid slice" },
+};
 
 const SingleChat = ({
   chatId,
   socket,
   messages,
   setMessages,
+  setIsSocketConnected,
 }: SingleChatProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isSocketConnected, setIsSocketConnected] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const { user } = useUserContext();
   const toast = useToast();
 
@@ -42,7 +53,9 @@ const SingleChat = ({
     }
     socket.emit("setup", user._id);
     socket.on("connected", () => setIsSocketConnected(true));
-  }, [socket, user]);
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stoppedTyping", () => setIsTyping(false));
+  }, [socket, setIsSocketConnected, user]);
 
   useEffect(() => {
     (async () => {
@@ -137,6 +150,15 @@ const SingleChat = ({
                   </Box>
                 </Box>
               ))
+            )}
+            {isTyping && (
+              <Box>
+                <Lottie
+                  options={defaultOptions}
+                  width={70}
+                  style={{ marginBottom: 15, marginLeft: 0 }}
+                />
+              </Box>
             )}
           </Box>
         </Box>

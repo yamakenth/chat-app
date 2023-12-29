@@ -55,6 +55,12 @@ io.on("connection", (socket) => {
     console.log(`user joined room: ${chatId}`);
   });
 
+  socket.on("typing", (chatId) => socket.in(chatId).emit("typing"));
+
+  socket.on("stoppedTyping", (chatId) =>
+    socket.in(chatId).emit("stoppedTyping")
+  );
+
   socket.on("newMessage", (newMessageReceived) => {
     const chat = newMessageReceived.chat || EMPTY_CHAT;
     if (!chat.users) {

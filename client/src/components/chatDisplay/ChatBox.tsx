@@ -26,6 +26,8 @@ const socket: Socket<WsServerToClientEvents, WsClientToServerEvents> =
 
 const ChatBox = ({ selectedChat, setSelectedChat, ...props }: ChatBoxProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isSocketConnected, setIsSocketConnected] = useState(false);
+  const [typing, setTyping] = useState(false);
   const { user } = useUserContext();
 
   const sender =
@@ -78,6 +80,7 @@ const ChatBox = ({ selectedChat, setSelectedChat, ...props }: ChatBoxProps) => {
               socket={socket}
               messages={messages}
               setMessages={setMessages}
+              setIsSocketConnected={setIsSocketConnected}
             />
             <NewMessageForm
               chatId={selectedChat._id}
@@ -85,6 +88,9 @@ const ChatBox = ({ selectedChat, setSelectedChat, ...props }: ChatBoxProps) => {
               isChatbotChat={isChatbotChat}
               messages={messages}
               setMessages={setMessages}
+              typing={typing}
+              setTyping={setTyping}
+              isSocketConnected={isSocketConnected}
             />
           </Box>
         </>

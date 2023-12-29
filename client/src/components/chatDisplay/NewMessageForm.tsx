@@ -13,10 +13,12 @@ import {
   WsServerToClientEvents,
 } from "@types";
 import { FormikErrors, useFormik } from "formik";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { Socket } from "socket.io-client";
 import { promptChatbotToRespond, sendMessage } from "../../api";
 import { useUserContext } from "../../context";
+
+const TYPING_TIMER_LENGTH_IN_MS = 3_000;
 
 type FormValues = {
   newMessage: string;
@@ -37,6 +39,9 @@ type newMessageFormProps = {
   isChatbotChat: boolean;
   messages: Message[];
   setMessages: Dispatch<SetStateAction<Message[]>>;
+  typing: boolean;
+  setTyping: Dispatch<SetStateAction<boolean>>;
+  isSocketConnected: boolean;
 };
 
 const NewMessageForm = ({
@@ -45,6 +50,9 @@ const NewMessageForm = ({
   isChatbotChat,
   messages,
   setMessages,
+  typing,
+  setTyping,
+  isSocketConnected,
 }: newMessageFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useUserContext();
@@ -54,6 +62,7 @@ const NewMessageForm = ({
     initialValues: { newMessage: "" },
     validate,
     onSubmit: async (values) => {
+      socket.emit("stoppedTyping", chatId);
       setIsLoading(true);
       try {
         const data = await sendMessage(chatId, values.newMessage, user.token);
@@ -79,6 +88,29 @@ const NewMessageForm = ({
     },
   });
 
+  const handleChange = (e: FormEvent<HTMLInputElement>) => {
+    formik.handleChange(e);
+
+    if (!isSocketConnected) {
+      return;
+    }
+
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", chatId);
+    }
+
+    const lastTypingTime = new Date().getTime();
+    setTimeout(() => {
+      const timeNow = new Date().getTime();
+      const timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= TYPING_TIMER_LENGTH_IN_MS && typing) {
+        socket.emit("stoppedTyping", chatId);
+        setTyping(false);
+      }
+    }, TYPING_TIMER_LENGTH_IN_MS);
+  };
+
   return (
     <form onSubmit={formik.handleSubmit} noValidate>
       <FormControl
@@ -88,7 +120,7 @@ const NewMessageForm = ({
         <InputGroup>
           <Input
             name="newMessage"
-            onChange={formik.handleChange}
+            onChange={handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.newMessage}
             type="text"
