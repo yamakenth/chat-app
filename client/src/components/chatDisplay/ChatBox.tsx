@@ -35,7 +35,6 @@ const ChatBox = ({
 }: ChatBoxProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
-  const [typing, setTyping] = useState(false);
   const { user } = useUserContext();
 
   const sender =
@@ -98,8 +97,6 @@ const ChatBox = ({
               isChatbotChat={isChatbotChat}
               messages={messages}
               setMessages={setMessages}
-              typing={typing}
-              setTyping={setTyping}
               isSocketConnected={isSocketConnected}
             />
           </Box>

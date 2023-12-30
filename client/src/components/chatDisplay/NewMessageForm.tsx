@@ -39,8 +39,6 @@ type newMessageFormProps = {
   isChatbotChat: boolean;
   messages: Message[];
   setMessages: Dispatch<SetStateAction<Message[]>>;
-  typing: boolean;
-  setTyping: Dispatch<SetStateAction<boolean>>;
   isSocketConnected: boolean;
 };
 
@@ -50,13 +48,13 @@ const NewMessageForm = ({
   isChatbotChat,
   messages,
   setMessages,
-  typing,
-  setTyping,
   isSocketConnected,
 }: newMessageFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useUserContext();
   const toast = useToast();
+
+  let typing = false;
 
   const formik = useFormik({
     initialValues: { newMessage: "" },
@@ -96,7 +94,7 @@ const NewMessageForm = ({
     }
 
     if (!typing) {
-      setTyping(true);
+      typing = true;
       socket.emit("typing", chatId);
     }
 
@@ -106,7 +104,7 @@ const NewMessageForm = ({
       const timeDiff = timeNow - lastTypingTime;
       if (timeDiff >= TYPING_TIMER_LENGTH_IN_MS && typing) {
         socket.emit("stoppedTyping", chatId);
-        setTyping(false);
+        typing = false;
       }
     }, TYPING_TIMER_LENGTH_IN_MS);
   };
