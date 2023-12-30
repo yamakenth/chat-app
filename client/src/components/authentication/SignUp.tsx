@@ -13,7 +13,7 @@ import {
 import { FormikErrors, useFormik } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUpUser } from "../../api";
+import { createChat, signUpUser } from "../../api";
 import { useUserContext } from "../../context";
 import { isEmptyObject } from "../../utils";
 
@@ -73,6 +73,7 @@ const SignUp = () => {
         });
         setUser(data);
         localStorage.setItem("userInfo", JSON.stringify(data));
+        await createChat("65849b1423c2ca861c9dd061", data.token);
         navigate("/chats");
       } catch (error) {
         toast({
