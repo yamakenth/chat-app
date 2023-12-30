@@ -38,6 +38,8 @@ const defaultOptions = {
   renderSettings: { preserveAspectRatio: "xMidYMid slice" },
 };
 
+let prevChatId = "";
+
 const SingleChat = ({
   chatId,
   socket,
@@ -61,6 +63,11 @@ const SingleChat = ({
     socket.on("typing", () => setIsTyping(true));
     socket.on("stoppedTyping", () => setIsTyping(false));
   }, [socket, setIsSocketConnected, user]);
+
+  useEffect(() => {
+    socket.emit("leaveChat", prevChatId);
+    prevChatId = chatId;
+  }, [socket, chatId]);
 
   useEffect(() => {
     (async () => {

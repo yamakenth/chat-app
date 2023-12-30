@@ -55,6 +55,11 @@ io.on("connection", (socket) => {
     console.log(`user joined room: ${chatId}`);
   });
 
+  socket.on("leaveChat", (chatId) => {
+    socket.leave(chatId);
+    console.log(`user left room: ${chatId}`);
+  });
+
   socket.on("typing", (chatId) => socket.in(chatId).emit("typing"));
 
   socket.on("stoppedTyping", (chatId) =>
