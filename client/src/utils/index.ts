@@ -11,3 +11,10 @@ export const sortChatListByMostRecent = (chats: Chat[]) => {
     return bCreatedAt - aCreatedAt;
   });
 };
+
+export const formattedLatestMessageContent = (content: string) => {
+  if (content.length <= 50) {
+    return content;
+  }
+  return content.substring(0, 51) + "...";
+};

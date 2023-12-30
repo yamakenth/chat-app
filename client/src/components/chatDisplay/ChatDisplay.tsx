@@ -2,6 +2,7 @@ import { Box, Text } from "@chakra-ui/react";
 import { Chat } from "@types";
 import { Dispatch, SetStateAction } from "react";
 import { useUserContext } from "../../context";
+import { formattedLatestMessageContent } from "../../utils";
 
 type ChatProps = {
   chat: Chat;
@@ -30,9 +31,7 @@ const ChatDisplay = ({ chat, selectedChat, setSelectedChat }: ChatProps) => {
       {chat.latestMessage && (
         <Text fontSize="xs" align="left">
           <b>{chat.latestMessage.sender?.name}:&nbsp;</b>
-          {chat.latestMessage.content?.length ?? 0 > 50
-            ? chat.latestMessage.content?.substring(0, 51) + "..."
-            : chat.latestMessage.content}
+          {formattedLatestMessageContent(chat.latestMessage.content || "")}
         </Text>
       )}
     </Box>
