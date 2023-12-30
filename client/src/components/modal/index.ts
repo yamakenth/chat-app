@@ -1,3 +1,4 @@
+import NewChatModal from "./NewChatModal";
 import ProfileModal from "./ProfileModal";
 
-export { ProfileModal };
+export { NewChatModal, ProfileModal };

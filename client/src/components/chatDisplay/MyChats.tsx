@@ -2,7 +2,7 @@ import { Box, BoxProps } from "@chakra-ui/react";
 import { Chat } from "@types";
 import { Dispatch, SetStateAction } from "react";
 import ChatList from "./ChatList";
-import ChatSearch from "./ChatSearch";
+import NewChat from "./NewChat";
 
 type MyChatsProps = BoxProps & {
   chats: Chat[];
@@ -27,7 +27,7 @@ const MyChats = ({
       overflowY="hidden"
       {...props}
     >
-      <ChatSearch />
+      <NewChat chats={chats} />
       <ChatList
         chats={chats}
         selectedChat={selectedChat}
