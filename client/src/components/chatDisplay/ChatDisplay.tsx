@@ -1,4 +1,4 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Avatar, Box, Text } from "@chakra-ui/react";
 import { Chat } from "@types";
 import { Dispatch, SetStateAction } from "react";
 import { useUserContext } from "../../context";
@@ -24,16 +24,23 @@ const ChatDisplay = ({ chat, selectedChat, setSelectedChat }: ChatProps) => {
       py={2}
       borderRadius="lg"
       w="100%"
+      display="flex"
+      alignItems="center"
+      justifyContent="flex-start"
+      gap={2}
     >
-      <Text fontSize="md" align="left">
-        {chatName}
-      </Text>
-      {chat.latestMessage && (
-        <Text fontSize="xs" align="left">
-          <b>{chat.latestMessage.sender?.name}:&nbsp;</b>
-          {formattedLatestMessageContent(chat.latestMessage.content || "")}
+      <Avatar name={chatName} size="md" />
+      <Box>
+        <Text fontSize="md" align="left">
+          {chatName}
         </Text>
-      )}
+        {chat.latestMessage && (
+          <Text fontSize="xs" align="left">
+            <b>{chat.latestMessage.sender?.name}:&nbsp;</b>
+            {formattedLatestMessageContent(chat.latestMessage.content || "")}
+          </Text>
+        )}
+      </Box>
     </Box>
   );
 };
