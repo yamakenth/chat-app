@@ -27,7 +27,7 @@ const MyChats = ({
       overflowY="hidden"
       {...props}
     >
-      <NewChat chats={chats} />
+      <NewChat chats={chats} setSelectedChat={setSelectedChat} />
       <ChatList
         chats={chats}
         selectedChat={selectedChat}

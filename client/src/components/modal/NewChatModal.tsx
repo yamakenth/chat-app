@@ -19,7 +19,14 @@ import {
 } from "@chakra-ui/react";
 import { Chat, User } from "@types";
 import { useFormik } from "formik";
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { createChat, getUserList } from "../../api";
 import { useUserContext } from "../../context";
 import { EMPTY_USER } from "../../constants";
@@ -29,9 +36,14 @@ import { UserListItem } from "../users";
 type NewChatModalProps = {
   children?: ReactNode;
   chats: Chat[];
+  setSelectedChat: Dispatch<SetStateAction<Chat>>;
 };
 
-const NewChatModal = ({ children, chats }: NewChatModalProps) => {
+const NewChatModal = ({
+  children,
+  chats,
+  setSelectedChat,
+}: NewChatModalProps) => {
   const { user } = useUserContext();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [selectedUser, setSelectedUser] = useState(EMPTY_USER);
@@ -90,9 +102,10 @@ const NewChatModal = ({ children, chats }: NewChatModalProps) => {
     }
 
     try {
-      await createChat(selectedUser._id, user.token);
+      const newChat = await createChat(selectedUser._id, user.token);
       onClose();
-      window.location.reload();
+      // window.location.reload();
+      setSelectedChat(newChat);
     } catch (error) {
       toast({
         duration: 5000,
