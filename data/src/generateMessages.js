@@ -1,7 +1,7 @@
 const colors = require("colors");
 const fs = require("fs");
 const ProgressBar = require("progress");
-const { OPENAI_API_KEY } = require("./environments");
+const { OPENAI_API_KEY } = require("./environment");
 
 const OPENAI_ENDPOINT = "https://api.openai.com/v1/chat/completions";
 const DEFAULT_OPENAI_MODEL = "gpt-3.5-turbo-1106";
