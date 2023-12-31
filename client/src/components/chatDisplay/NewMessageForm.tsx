@@ -40,6 +40,7 @@ type newMessageFormProps = {
   messages: Message[];
   setMessages: Dispatch<SetStateAction<Message[]>>;
   isSocketConnected: boolean;
+  setIsTyping: Dispatch<SetStateAction<boolean>>;
 };
 
 const NewMessageForm = ({
@@ -49,6 +50,7 @@ const NewMessageForm = ({
   messages,
   setMessages,
   isSocketConnected,
+  setIsTyping,
 }: newMessageFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useUserContext();
@@ -68,7 +70,9 @@ const NewMessageForm = ({
         setMessages([...messages, data]);
         socket.emit("newMessage", data);
         if (isChatbotChat) {
+          setIsTyping(true);
           const response = await promptChatbotToRespond(chatId, user.token);
+          setIsTyping(false);
           setMessages([...messages, data, response]);
         }
       } catch (error) {

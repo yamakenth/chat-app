@@ -27,6 +27,8 @@ type SingleChatProps = {
   setIsSocketConnected: Dispatch<SetStateAction<boolean>>;
   notifications: Chat[];
   setNotifications: Dispatch<SetStateAction<Chat[]>>;
+  isTyping: boolean;
+  setIsTyping: Dispatch<SetStateAction<boolean>>;
 };
 
 let selectedChatIdCompare: string | undefined;
@@ -48,9 +50,10 @@ const SingleChat = ({
   setIsSocketConnected,
   notifications,
   setNotifications,
+  isTyping,
+  setIsTyping,
 }: SingleChatProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
   const { user } = useUserContext();
   const toast = useToast();
 
@@ -62,7 +65,7 @@ const SingleChat = ({
     socket.on("connected", () => setIsSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stoppedTyping", () => setIsTyping(false));
-  }, [socket, setIsSocketConnected, user]);
+  }, [socket, setIsTyping, setIsSocketConnected, user]);
 
   useEffect(() => {
     socket.emit("leaveChat", prevChatId);

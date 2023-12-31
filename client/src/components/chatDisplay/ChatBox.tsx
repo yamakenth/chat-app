@@ -35,6 +35,7 @@ const ChatBox = ({
 }: ChatBoxProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const { user } = useUserContext();
 
   const sender =
@@ -90,6 +91,8 @@ const ChatBox = ({
               setIsSocketConnected={setIsSocketConnected}
               notifications={notifications}
               setNotifications={setNotifications}
+              isTyping={isTyping}
+              setIsTyping={setIsTyping}
             />
             <NewMessageForm
               chatId={selectedChat._id}
@@ -98,6 +101,7 @@ const ChatBox = ({
               messages={messages}
               setMessages={setMessages}
               isSocketConnected={isSocketConnected}
+              setIsTyping={setIsTyping}
             />
           </Box>
         </>
