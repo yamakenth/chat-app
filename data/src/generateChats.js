@@ -20,14 +20,21 @@ const generateChats = async (chatsFname, usersFname) => {
    */
   const randomChatsSet = {};
   for (let i = 0; i < users.length; i++) {
-    const numPairs = Math.floor(generateRandomNumber(users.length) / 10);
-    randomChatsSet[users[i].email] = new Set();
+    let numPairs = Math.floor(generateRandomNumber(users.length) / 5);
+    const curUserEmail = users[i].email;
+    if (
+      curUserEmail === "kyamada@example.com" ||
+      curUserEmail === "guest@example.com"
+    ) {
+      numPairs = 12;
+    }
+    randomChatsSet[curUserEmail] = new Set();
     for (let j = 0; j < numPairs; j++) {
       const randomIndex = generateRandomNumber(users.length);
       if (randomIndex === i) {
         continue;
       }
-      randomChatsSet[users[i].email].add(users[randomIndex].email);
+      randomChatsSet[curUserEmail].add(users[randomIndex].email);
     }
   }
 

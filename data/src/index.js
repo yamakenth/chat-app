@@ -13,11 +13,9 @@ const CHATS_FNAME = "chats.json";
 const MESSAGES_FNAME = "messages.json";
 
 const main = async () => {
-  /* generate json files of mock data
   await generateUsers(NUM_USERS, USERS_FNAME);
   await generateChats(CHATS_FNAME, USERS_FNAME);
   await generateMessages(MESSAGES_FNAME, CHATS_FNAME);
-  */
 
   const client = await connectDB();
   const db = client.db("test");

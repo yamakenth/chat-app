@@ -24,7 +24,12 @@ const generateUsers = async (numUsers, usersFname) => {
       throw new Error(data.error);
     }
     const mappedUsers = mapUsers(data.results);
-    fs.writeFileSync(usersFname, JSON.stringify(mappedUsers));
+    const users = [
+      ...mappedUsers,
+      { name: "Ken Yamada", email: "kyamada@example.com" },
+      { name: "Guest User", email: "guest@example.com" },
+    ];
+    fs.writeFileSync(usersFname, JSON.stringify(users));
     console.log(`successfully created ${usersFname}`.green);
   } catch (error) {
     throw new Error(error.message);
