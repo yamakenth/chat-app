@@ -79,9 +79,12 @@ const Login = () => {
     },
   });
 
-  const populateGuestCredentials = () => {
-    formik.setFieldValue("email", GUEST_CREDENTIALS.email);
-    formik.setFieldValue("password", GUEST_CREDENTIALS.password);
+  const populateGuestCredentials = async () => {
+    await formik.setFieldValue("email", GUEST_CREDENTIALS.email);
+    await formik.setFieldValue("password", GUEST_CREDENTIALS.password);
+    const emailInput = document.querySelector("#email") as HTMLInputElement;
+    emailInput?.focus();
+    emailInput?.blur();
   };
 
   return (
@@ -94,6 +97,7 @@ const Login = () => {
           <FormLabel>Email</FormLabel>
           <Input
             name="email"
+            id="email"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.email}
