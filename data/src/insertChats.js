@@ -35,7 +35,7 @@ const insertChats = async (db, chatsFname) => {
       }
     }
     if (bar.complete) {
-      console.log("successfully inserted new users".green);
+      console.log("successfully inserted new chats".green);
     }
   } catch (error) {
     throw new Error(error.message);

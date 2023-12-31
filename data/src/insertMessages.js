@@ -42,7 +42,7 @@ const insertMessages = async (db, messagesFname) => {
       }
     }
     if (bar.complete) {
-      console.log("successfully inserted new users".green);
+      console.log("successfully inserted new messages".green);
     }
   } catch (error) {
     throw new Error(error.message);
