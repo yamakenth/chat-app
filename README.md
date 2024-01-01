@@ -7,7 +7,7 @@
 
 ## Demo
 
-[Deployment Link](link)
+[Deployment Link](https://chat-app-i9jv.onrender.com)
 
 ![demo-page](./docs/demo-page.png)
 
