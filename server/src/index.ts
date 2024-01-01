@@ -2,9 +2,10 @@ import { WsClientToServerEvents, WsServerToClientEvents } from "@types";
 import "colors.ts";
 import cors from "cors";
 import express, { Request, Response } from "express";
+import path from "path";
 import { Server } from "socket.io";
 import { connectDB } from "./config";
-import { PORT as PORT_FROM_ENV } from "./environment";
+import { NODE_ENV, PORT as PORT_FROM_ENV } from "./environment";
 import { auth, errorHandler, routeNotFound } from "./middleware";
 import { chatRoutes, messageRoutes, userRoutes } from "./routes";
 import { EMPTY_CHAT } from "./constants";
@@ -29,6 +30,18 @@ app.get("/api", (_req: Request, res: Response) => {
     .status(200)
     .json({ message: "Successfully connected to Chat App server" });
 });
+
+if (NODE_ENV === "production") {
+  const __dirname1 = path.resolve();
+  app.use(express.static(path.join(__dirname1, "/client/build")));
+  app.get("*", (_req: Request, res: Response) =>
+    res.sendFile(path.resolve(__dirname1, "client", "build", "index.html"))
+  );
+} else {
+  app.get("/", (_req: Request, res: Response) => {
+    res.send({ message: "Welcome to Underground Foodies" });
+  });
+}
 
 app.use(routeNotFound);
 app.use(errorHandler);

@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
 import path from "path";
 
-dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
+/* deployment: change path of .env */
+dotenv.config({ path: path.resolve(__dirname, "../../../../../.env") });
 
 export const PORT = process.env.PORT as string;
 export const MONGO_URI = process.env.MONGO_URI as string;
