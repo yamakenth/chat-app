@@ -32,6 +32,10 @@ const ProfileModal = ({ user, setUser, children }: ProfileModalProps) => {
   const toast = useToast();
   const navigate = useNavigate();
 
+  const isAccountDeletionDisabled = () => {
+    return user.email === "guest@example.com";
+  };
+
   const handleAccountDeletion = async () => {
     if (!setUser) {
       return;
@@ -103,6 +107,7 @@ const ProfileModal = ({ user, setUser, children }: ProfileModalProps) => {
                   colorScheme="red"
                   onClick={handleAccountDeletion}
                   w="100%"
+                  isDisabled={isAccountDeletionDisabled()}
                 >
                   Delete Account
                 </Button>
