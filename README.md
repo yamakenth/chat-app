@@ -78,6 +78,6 @@ User profile can be viewed. The logged-in user can also delete their account.
 ## Technologies
 
 - **Languages:** Typescript, Javascript, HTML, CSS
-- **Framework:** React.js, Express.js, Socket.IO, Chakra UI
+- **Frameworks:** React.js, Node.js, Express.js, Socket.IO, Chakra UI
 - **Database:** MongoDB
 - **Libraries/Miscellaneous:** REST API, JWT, WebSocket, OpenAI API, Formik, JSDoc
