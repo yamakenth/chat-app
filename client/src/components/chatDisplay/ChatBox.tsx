@@ -15,7 +15,7 @@ import { ProfileModal } from "../modal";
 import SingleChat from "./SingleChat";
 
 /* deployment: change endpoint to deployed url */
-const SERVER_ENDPOINT = "https://chat-app-i9jv.onrender.com";
+const SERVER_ENDPOINT = "https://chat-app-w91t.onrender.com";
 
 type ChatBoxProps = BoxProps & {
   selectedChat: Chat;
