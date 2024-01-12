@@ -14,8 +14,7 @@ import NewMessageForm from "./NewMessageForm";
 import { ProfileModal } from "../modal";
 import SingleChat from "./SingleChat";
 
-/* deployment: change endpoint to deployed url */
-const SERVER_ENDPOINT = "https://chat-app-w91t.onrender.com";
+const SERVER_ENDPOINT = "/";
 
 type ChatBoxProps = BoxProps & {
   selectedChat: Chat;
