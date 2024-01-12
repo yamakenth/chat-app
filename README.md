@@ -7,7 +7,7 @@
 
 ## Demo
 
-[Deployment Link](https://chat-app-w91t.onrender.com)
+Deployed on Render with Docker image - [Deployment Link](https://chat-app-w91t.onrender.com)
 
 ![demo-page](./docs/demo-page.png)
 
