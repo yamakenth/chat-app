@@ -5,6 +5,13 @@
 > chat data are encrypted and stored on the server. Users can chat with a chatbot
 > powered by OpenAI Chat Completions API.
 
+## Table of Contents
+
+- [Demo](#demo)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Technologies](#technologies)
+
 ## Demo
 
 Deployed on Render with Docker image - [Deployment Link](https://chat-app-w91t.onrender.com)
